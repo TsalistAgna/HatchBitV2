@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project_mobile/home_screen.dart';
 
 class TaskWithTimer extends StatefulWidget {
-  final String taskName;
+  final String taskName; // nama task
   final int taskDuration; // dalam menit
 
   const TaskWithTimer({

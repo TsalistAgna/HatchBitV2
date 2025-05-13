@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/home_screen.dart';
+import 'package:project_mobile/task_with_timer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'intro_pages/intro_page1.dart';
@@ -75,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HomeScreen(),
+                          builder: (context) => const TaskWithTimer(taskName: "Read Book", taskDuration: 30),
                         ),
                       );
                     } else {

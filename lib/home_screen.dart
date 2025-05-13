@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'task_with_timer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,13 +11,22 @@ class HomeScreen extends StatelessWidget {
         title: const Text('HatchBit'),
         backgroundColor: Colors.purple.shade200, // opsional, bisa diganti sesuai tema kamu
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to HatchBit!',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+      body: Center(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.deepPurple,
+            foregroundColor: Colors.white,
           ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const TaskWithTimer(
+                taskName: "Read A Book", //
+                taskDuration: 5, //
+              )),
+            );
+          },
+          child: const Text('Next'),
         ),
       ),
     );

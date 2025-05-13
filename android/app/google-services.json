@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1023992943590",
+    "project_id": "hatchbit-flutter",
+    "storage_bucket": "hatchbit-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023992943590:android:f8260ba9d6a9cd90633c27",
+        "android_client_info": {
+          "package_name": "com.example.project_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023992943590-igf1ofo5majtr32ihj4a7clruhvald0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project_mobile",
+            "certificate_hash": "1f395b44487f115dccb5d4bb6e54406bf069549d"
+          }
+        },
+        {
+          "client_id": "1023992943590-ff6smvi8ohv582sp6moitu2p6rgutkbm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8A7hwvUsVc1GT_r-3W2RW8OSnn46UZrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023992943590-ff6smvi8ohv582sp6moitu2p6rgutkbm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

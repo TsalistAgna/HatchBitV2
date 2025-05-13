@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/home_screen.dart';
+import 'package:project_mobile/login_page.dart';
 import 'package:project_mobile/task_with_timer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -73,11 +74,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 GestureDetector(
                   onTap: () {
                     if (onLastPage) {
-                      Navigator.pushReplacement(
+                      // TODO: PINJEM BENTAR
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const TaskWithTimer(taskName: "Read Book", taskDuration: 30),
+                      //   ),
+                      // );
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => const TaskWithTimer(taskName: "Read Book", taskDuration: 30),
-                        ),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     } else {
                       _controller.nextPage(

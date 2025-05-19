@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const TaskWithTimer(
                 taskName: "Read A Book", //
-                taskDuration: 5, //
+                taskDuration: 1, //
               )),
             );
           },

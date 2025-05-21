@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/addTask.dart';
 import 'task_with_timer.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -18,6 +19,10 @@ class HomeScreen extends StatelessWidget {
             // Navigate to home screen
           } else if (index == 1) {
             // Navigate to add task screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddHabitPage()),
+            );
           } else if (index == 2) {
             // Navigate to profile screen
           }

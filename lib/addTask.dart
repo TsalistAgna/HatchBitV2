@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/home_screen.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -22,6 +23,42 @@ class _AddHabitPageState extends State<AddHabitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.white,
+        color: Colors.deepPurple,
+        onTap: (index){
+          // Handle button tap
+          if (index == 0) {
+            // Navigate to home screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          } else if (index == 1) {
+            // Navigate to add task screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddHabitPage()),
+            );
+          } else if (index == 2) {
+            // Navigate to profile screen
+          }
+        },
+        items: [
+        Icon(
+          Icons.home,
+          color: Colors.white,
+          ),
+        Icon(
+          Icons.add,
+          color: Colors.white,
+          ),
+        Icon(
+          Icons.person,
+          color: Colors.white,
+          ),
+      ]
+      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(

@@ -22,6 +22,16 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
   bool isRunning = false;
   bool isDone = false;
 
+  String get currentImage {
+  if (remainingSeconds == 0) {
+    return 'assets/mascot.png';
+  } else if (remainingSeconds <= (widget.taskDuration * 60) / 2) {
+    return 'assets/hatching.png';
+  } else {
+    return 'assets/egg.png';
+  }
+}
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +82,11 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
               child: Row(
                 children: [
                   IconButton(
-                      icon: const Icon(Icons.arrow_back),
+                      icon: Image.asset(
+                        'assets/icons/back.png',
+                        width: 40,
+                        height: 40,
+                      ),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -81,10 +95,11 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
                       }
                   ),
                   Text(
-                    widget.taskName,
+                    widget.taskName,  
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFF3A2081),
                     ),
                   ),
                 ],
@@ -92,36 +107,54 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
             ),
             const Spacer(),
             Image.asset(
-              'assets/mascot.png',
+              currentImage,
               width: 200,
               height: 200,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 21),
+            Text(
+              "Timer",
+              style: TextStyle(
+                fontFamily: "PlusJakartaSans",
+                fontSize: 25,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF262626)
+              ),
+              ),
+            const SizedBox(height: 4),
             Text(
               formatTime(remainingSeconds),
               style: const TextStyle(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
+                fontFamily: "PlusJakartaSans",
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
 
               ),
             ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
-              ),
-              onPressed: isDone
-                  ? null
-                  : isRunning
-                  ? pauseTimer
-                  : startTimer,
-              child: Text(
-                isDone
-                    ? "Done"
+            const SizedBox(height: 29),
+            Container(
+              width: 333,
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF3A2081),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)
+                  )
+                ),
+                onPressed: isDone
+                    ? null
                     : isRunning
-                    ? "Pause"
-                    : "Start Timer",
+                    ? pauseTimer
+                    : startTimer,
+                child: Text(
+                  isDone
+                      ? "Done"
+                      : isRunning
+                      ? "Pause"
+                      : "Start Timer",
+                ),
               ),
             ),
             const Spacer(),

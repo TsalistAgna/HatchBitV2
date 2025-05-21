@@ -75,16 +75,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   onTap: () {
                     if (onLastPage) {
                       // TODO: PINJEM BENTAR
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const TaskWithTimer(taskName: "Read Book", taskDuration: 30),
-                      //   ),
-                      // );
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
                       );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => LoginPage()),
+                      // );
                     } else {
                       _controller.nextPage(
                         duration: const Duration(milliseconds: 500),

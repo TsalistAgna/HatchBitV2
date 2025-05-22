@@ -40,6 +40,10 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_svg: ^2.1.0
   curved_navigation_bar: ^1.0.3
+  # calendar_agenda: 
+  #   path: "dev_lib/calendar_agenda-main"
+  # syncfusion_flutter_calendar: ^18.4.46
+  syncfusion_flutter_datepicker: ^23.1.36
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

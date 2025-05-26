@@ -5,11 +5,13 @@ import 'package:project_mobile/home_screen.dart';
 class TaskWithTimer extends StatefulWidget {
   final String taskName; // nama task
   final int taskDuration; // dalam menit
+  final VoidCallback? onComplete; // callback ketika task selesai
 
   const TaskWithTimer({
     super.key,
     required this.taskName,
     required this.taskDuration,
+    this.onComplete,
   });
 
   @override
@@ -50,6 +52,7 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
           isDone = true;
         });
         timer?.cancel();
+        widget.onComplete?.call(); // panggil callback ketika selesai
       }
     });
     setState(() {

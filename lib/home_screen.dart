@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_mobile/addTask.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'addTask.dart';
 import 'task_with_timer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,9 +16,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate = DateTime.now();
 
-  final List<String> todoTasks = ['No Snack', 'Read a Book - 30 Mins'];
-  final List<String> doneTasks = ['Wake Up at 5 AM'];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,15 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
         color: Colors.deepPurple,
         onTap: (index) {
           if (index == 0) {
-            // Navigate to home screen
+            // Stay on home
           } else if (index == 1) {
-            // Navigate to add task screen
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const AddHabitPage()),
             );
           } else if (index == 2) {
-            // Navigate to profile screen
+            // Navigate to profile
           }
         },
         items: const [
@@ -44,91 +42,112 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Padding(
-  padding: const EdgeInsets.only(top: 53, left: 13, right: 13),
-  child: SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Hi Carmen
-        RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontFamily: "PlusJakartaSans",
-              fontSize: 25,
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-            ),
-            children: [
-              TextSpan(text: "Hi, "),
-              TextSpan(
-                text: "Carmen",
-                style: TextStyle(color: Color(0xFF7B6AAB)),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 15),
+        padding: const EdgeInsets.only(top: 53, left: 13, right: 13),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('habits')
+              .where('uid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
+              .orderBy('createdAt', descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('Something went wrong'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        // Calendar
-        SizedBox(
-          height: 100,
-          child: SfDateRangePicker(
-            onSelectionChanged: (args) {
-              setState(() {
-                selectedDate = args.value;
-              });
-            },
-            selectionMode: DateRangePickerSelectionMode.single,
-            initialSelectedDate: selectedDate,
-            view: DateRangePickerView.month,
-            monthViewSettings: const DateRangePickerMonthViewSettings(
-              viewHeaderHeight: 60,
-              dayFormat: 'EEE',
-              numberOfWeeksInView: 1,
-              enableSwipeSelection: true,
-            ),
-            headerHeight: 0,
-            showNavigationArrow: false,
-          ),
-        ),
+            final habits = snapshot.data!.docs;
 
-        const SizedBox(height: 20),
-        const Text("To Do",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-
-        // To Do tasks
-        ...todoTasks.map((task) {
-          return TaskCard(
-            taskName: task,
-            isDone: true,
-            onTap: task == 'Read a Book - 30 Mins'
-                ? () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TaskWithTimer(
-                          taskName: "Read A Book",
-                          taskDuration: 30,
-                        ),
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: const TextSpan(
+                      style: TextStyle(
+                        fontFamily: "PlusJakartaSans",
+                        fontSize: 25,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
                       ),
+                      children: [
+                        TextSpan(text: "Hi, "),
+                        TextSpan(
+                          text: "Carmen",
+                          style: TextStyle(color: Color(0xFF7B6AAB)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  SizedBox(
+                    height: 100,
+                    child: SfDateRangePicker(
+                      onSelectionChanged: (args) {
+                        setState(() {
+                          selectedDate = args.value;
+                        });
+                      },
+                      selectionMode: DateRangePickerSelectionMode.single,
+                      initialSelectedDate: selectedDate,
+                      view: DateRangePickerView.month,
+                      monthViewSettings: const DateRangePickerMonthViewSettings(
+                        viewHeaderHeight: 60,
+                        dayFormat: 'EEE',
+                        numberOfWeeksInView: 1,
+                        enableSwipeSelection: true,
+                      ),
+                      headerHeight: 0,
+                      showNavigationArrow: false,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text("To Do",
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600)),
+
+                  ...habits.map((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    final title = data['title'] ?? '';
+                    final desc = data['description'] ?? '';
+                    final useTimer = data['useTimer'] ?? false;
+                    final hours = data['hours'] ?? 0;
+                    final minutes = data['minutes'] ?? 0;
+                    final isCompleted = data['isCompleted'] ?? false;
+
+                    return TaskCard(
+                      taskName: "$title${useTimer ? " ($hours:$minutes)" : ""}",
+                      isDone: isCompleted,
+                      onTap: () {
+                        if (useTimer) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TaskWithTimer(
+                                taskName: title,
+                                taskDuration: (hours * 60) + minutes,
+                                onComplete: () {
+                                  // Update completion status when timer finishes
+                                  doc.reference.update({'isCompleted': true});
+                                },
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Toggle completion status for non-timer tasks
+                          doc.reference.update({'isCompleted': !isCompleted});
+                        }
+                      },
                     );
-                  }
-                : null,
-          );
-        }),
-
-        const SizedBox(height: 45),
-        const Text("Done",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-
-        // Done tasks
-        ...doneTasks.map((task) => TaskCard(taskName: task, isDone: false)),
-        const SizedBox(height: 45),
-      ],
-    ),
-  ),
-),
-
+                  }),
+                  const SizedBox(height: 45),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -142,25 +161,31 @@ class TaskCard extends StatelessWidget {
     super.key,
     required this.taskName,
     required this.isDone,
-    this.onTap, 
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, 
+      onTap: onTap,
       child: Card(
-        color: Colors.deepPurple.shade50,
+        color: isDone ? Colors.green.shade50 : Colors.deepPurple.shade50,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.symmetric(vertical: 6),
         child: ListTile(
-          title: Text(taskName),
-          trailing: isDone
-              ? const Icon(Icons.check, color: Colors.purple)
-              : const Icon(Icons.close, color: Colors.purple),
+          title: Text(
+            taskName,
+            style: TextStyle(
+              decoration: isDone ? TextDecoration.lineThrough : null,
+              color: isDone ? Colors.grey : Colors.black,
+            ),
+          ),
+          trailing: Icon(
+            isDone ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: isDone ? Colors.green : Colors.purple,
+          ),
         ),
       ),
     );
   }
 }
-

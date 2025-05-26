@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_mobile/home_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -73,7 +74,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                   const Text("Title"),
                   const SizedBox(height: 5),
                   TextField(
-                    controller: _titleController, // Tambah controller
+                    controller: _titleController,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.deepPurple.shade50,
@@ -87,7 +88,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                   const Text("Description"),
                   const SizedBox(height: 5),
                   TextField(
-                    controller: _descriptionController, // Tambah controller
+                    controller: _descriptionController,
                     maxLines: 2,
                     decoration: InputDecoration(
                       filled: true,
@@ -119,16 +120,16 @@ class _AddHabitPageState extends State<AddHabitPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          _buildTimeField("HH", (val) {
-                            setState(() => hours = int.tryParse(val) ?? 0);
+                          _buildTimeDropdown("H", hours, 24, (value) {
+                            setState(() => hours = value!);
                           }),
                           const Text(":", style: TextStyle(fontSize: 20)),
-                          _buildTimeField("MM", (val) {
-                            setState(() => minutes = int.tryParse(val) ?? 0);
+                          _buildTimeDropdown("M", minutes, 60, (value) {
+                            setState(() => minutes = value!);
                           }),
                           const Text(":", style: TextStyle(fontSize: 20)),
-                          _buildTimeField("SS", (val) {
-                            setState(() => seconds = int.tryParse(val) ?? 0);
+                          _buildTimeDropdown("S", seconds, 60, (value) {
+                            setState(() => seconds = value!);
                           }),
                         ],
                       ),
@@ -161,31 +162,26 @@ class _AddHabitPageState extends State<AddHabitPage> {
     );
   }
 
-  Widget _buildTimeField(String hint, Function(String) onChanged) {
-    return SizedBox(
-      width: 60,
-      child: TextField(
-        onChanged: onChanged,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-          hintText: hint,
-          filled: true,
-          fillColor: Colors.deepPurple.shade50,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
+  Widget _buildTimeDropdown(String label, int value, int max, ValueChanged<int?> onChanged) {
+    return DropdownButton<int>(
+      value: value,
+      hint: Text(label),
+      items: List.generate(max, (index) => DropdownMenuItem(
+        value: index,
+        child: Text('$index $label'),
+      )),
+      onChanged: onChanged,
+      dropdownColor: Colors.deepPurple.shade50,
+      borderRadius: BorderRadius.circular(8),
     );
   }
 
   Future<void> _saveHabit() async {
     String title = _titleController.text.trim();
     String description = _descriptionController.text.trim();
-    int totalSeconds = hours * 3600 + minutes * 60 + seconds;
+    final user = FirebaseAuth.instance.currentUser;
 
+    // Validasi input
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Title cannot be empty")),
@@ -193,31 +189,85 @@ class _AddHabitPageState extends State<AddHabitPage> {
       return;
     }
 
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("You must be logged in to add habits")),
+      );
+      return;
+    }
+
+    // Validasi timer jika useTimer aktif
+    if (useTimer && hours == 0 && minutes == 0 && seconds == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please set timer duration")),
+      );
+      return;
+    }
+
     try {
+      // Tampilkan loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
+      );
+
+      // Simpan ke Firestore
       await FirebaseFirestore.instance.collection('habits').add({
+        'uid': user.uid,
         'title': title,
         'description': description,
         'useTimer': useTimer,
-        'durationInSeconds': useTimer ? totalSeconds : 0,
+        'hours': hours,
+        'minutes': minutes,
+        'seconds': seconds,
+        'durationInSeconds': hours * 3600 + minutes * 60 + seconds,
         'createdAt': Timestamp.now(),
+        'isCompleted': false,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Habit added successfully!")),
+      // Tutup loading indicator
+      Navigator.pop(context);
+
+      // Tampilkan dialog konfirmasi
+      await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Success"),
+          content: const Text("Habit created successfully!"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Tutup dialog
+                _resetForm();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        ),
       );
-
-      // Optional: Clear fields
-      _titleController.clear();
-      _descriptionController.clear();
-      setState(() {
-        useTimer = false;
-        hours = minutes = seconds = 0;
-      });
 
     } catch (e) {
+      // Tutup loading indicator jika ada error
+      Navigator.pop(context);
+      
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Failed to add habit")),
+        SnackBar(content: Text("Failed to add habit: ${e.toString()}")),
       );
+      debugPrint("Error saving habit: $e");
     }
+  }
+
+  void _resetForm() {
+    _titleController.clear();
+    _descriptionController.clear();
+    setState(() {
+      useTimer = false;
+      hours = minutes = seconds = 0;
+    });
   }
 }

@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:project_mobile/home_screen.dart';
 import 'package:project_mobile/sign_up_page.dart';
 import 'package:project_mobile/user_auth/firebase_auth/firebase_auth_services.dart';
+import 'package:project_mobile/verifikasi_email.dart';
 import 'package:project_mobile/widgets/form_container_widget.dart';
 import 'global/toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -180,14 +181,24 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isSigning = false);
 
     if (user != null) {
-      showToasts(message: "User is successfully signed in");
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-        (route) => false,
-      );
+      // Cek dulu udah verify email ga
+      await user.reload();
+      if (user.emailVerified) {
+        showToasts(message: "User is successfully signed in");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+          (route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HalamanVerifikasiEmail()),
+          (route) => false,
+        );
+      }
     } else {
-      showToasts(message: "Some error happened");
+      showToasts(message: "Invalid email or password!");
     }
   }
 

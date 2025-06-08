@@ -4,6 +4,7 @@ import 'package:project_mobile/global/toast.dart';
 import 'package:project_mobile/home_screen.dart';
 import 'package:project_mobile/login_page.dart';
 import 'package:project_mobile/user_auth/firebase_auth/firebase_auth_services.dart';
+import 'package:project_mobile/verifikasi_email.dart';
 import 'package:project_mobile/widgets/form_container_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -175,14 +176,14 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     if (user != null) {
-      showToasts(message: "User is successfully created");
+      // showToasts(message: "User is successfully created");
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HalamanVerifikasiEmail()),
         (route) => false,
       );
     } else {
-      showToasts(message: "Some error happened");
+      showToasts(message: "Some error happened during sign up!!");
     }
   }
 }

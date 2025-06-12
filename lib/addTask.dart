@@ -3,6 +3,7 @@ import 'package:project_mobile/home_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'profile.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -38,7 +39,10 @@ class _AddHabitPageState extends State<AddHabitPage> {
           } else if (index == 1) {
             // Stay on AddHabitPage
           } else if (index == 2) {
-            // Navigate to profile screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           }
         },
         items: const [

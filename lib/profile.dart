@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'history.dart';
 import 'setting.dart';
 import 'home_screen.dart';
+import 'about_us.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -151,46 +152,55 @@ class ProfileScreen extends StatelessWidget {
               const Spacer(),
 
               // ABOUT US
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'About Us',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      height: 1,
-                      width: double.infinity,
-                      color: Colors.white30,
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: const [
-                        Icon(Icons.copyright, size: 16, color: Colors.white70),
-                        SizedBox(width: 6),
-                        Text(
-                          'PMaap Studio 2025',
-                          style: TextStyle(fontSize: 14, color: Colors.white70),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const AboutUsPage()),
+                  );
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'About Us',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 1,
+                        width: double.infinity,
+                        color: Colors.white30,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: const [
+                          Icon(Icons.copyright, size: 16, color: Colors.white70),
+                          SizedBox(width: 6),
+                          Text(
+                            'PMaap Studio 2025',
+                            style: TextStyle(fontSize: 14, color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 ),
               ),
+
             ],
           ),
         ),

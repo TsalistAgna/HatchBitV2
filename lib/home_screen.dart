@@ -10,6 +10,7 @@ import 'setting.dart';
 import 'profile.dart';
 import 'about_us.dart';
 
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -19,6 +20,26 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate = DateTime.now();
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getUserName();
+  }
+
+  void getUserName() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (doc.exists) {
+        setState(() {
+          username = doc.data()?['name'] ?? '';
+        });
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,18 +96,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
-                    text: const TextSpan(
-                      style: TextStyle(
+                    text: TextSpan(
+                      style: const TextStyle(
                         fontFamily: "PlusJakartaSans",
                         fontSize: 25,
                         color: Colors.black,
                         fontWeight: FontWeight.w600,
                       ),
                       children: [
-                        TextSpan(text: "Hi, "),
+                        const TextSpan(text: "Hi, "),
                         TextSpan(
-                          text: "Carmen",
-                          style: TextStyle(color: Color(0xFF7B6AAB)),
+                          text: username.isNotEmpty ? username : '...',
+                          style: const TextStyle(color: Color(0xFF7B6AAB)),
                         ),
                       ],
                     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/edit_profile.dart';
 import 'home_screen.dart';
+import 'profile.dart';
 
 void main() {
   runApp(MaterialApp(home: AboutUsPage(), debugShowCheckedModeBanner: false));
@@ -19,7 +21,7 @@ class AboutUsPage extends StatelessWidget {
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
             );
           },
         ),

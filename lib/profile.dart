@@ -1,16 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // tambahkan ini
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'history.dart';
 import 'setting.dart';
 import 'home_screen.dart';
 import 'about_us.dart';
 import 'addTask.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  int completedCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCompletedTaskCount();
+  }
+
+  void fetchCompletedTaskCount() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('habits')
+        .where('uid', isEqualTo: uid)
+        .where('isCompleted', isEqualTo: true)
+        .get();
+
+    setState(() {
+      completedCount = snapshot.docs.length;
+    });
+  }
+
+  int getLevel(int count) {
+    if (count >= 125) return 5;
+    if (count >= 100) return 4;
+    if (count >= 75) return 3;
+    if (count >= 50) return 2;
+    if (count >= 20) return 1;
+    return 0;
+  }
+
+  int getNextLevelTarget(int currentLevel) {
+    switch (currentLevel) {
+      case 0:
+        return 20;
+      case 1:
+        return 50;
+      case 2:
+        return 75;
+      case 3:
+        return 100;
+      case 4:
+        return 125;
+      default:
+        return 125;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final level = getLevel(completedCount);
+    final nextLevelTarget = getNextLevelTarget(level);
+    final progress = completedCount / nextLevelTarget;
+
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: CurvedNavigationBar(
@@ -19,17 +80,13 @@ class ProfileScreen extends StatelessWidget {
         color: Colors.deepPurple,
         onTap: (index) {
           if (index == 0) {
-            Navigator.push(
-              context,
+            Navigator.push(context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else if (index == 1) {
-            Navigator.push(
-              context,
+            Navigator.push(context,
               MaterialPageRoute(builder: (context) => const AddHabitPage()),
             );
-          } else if (index == 2) {
-            // Stay on ProfileScreen
           }
         },
         items: const [
@@ -69,7 +126,10 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
-                    Image.asset('assets/mascot_1.png', height: 130),
+                    Image.asset(
+                      'assets/mascot${(level.clamp(1, 5))}.png', // level 0 pakai mascot_1
+                      height: 130,
+                    ),
                   ],
                 ),
               ),
@@ -78,9 +138,9 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Level', style: TextStyle(fontSize: 16)),
-                      Text('1', style: TextStyle(fontWeight: FontWeight.bold)),
+                    children: [
+                      const Text('Level', style: TextStyle(fontSize: 16)),
+                      Text('$level', style: const TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -89,36 +149,30 @@ class ProfileScreen extends StatelessWidget {
                     child: Container(
                       height: 24,
                       child: LinearProgressIndicator(
-                        value: 12 / 20,
+                        value: progress.clamp(0.0, 1.0),
                         backgroundColor: Colors.purple.shade100,
-                        valueColor: AlwaysStoppedAnimation<Color>(
+                        valueColor: const AlwaysStoppedAnimation<Color>(
                           Colors.deepPurple,
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    '12/20 Task',
-                    style: TextStyle(color: Colors.grey),
+                  Text(
+                    '$completedCount/$nextLevelTarget Task',
+                    style: const TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HistoryScreen(),
-                    ),
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HistoryScreen()),
                   );
                 },
                 icon: const Icon(Icons.history, color: Colors.white),
-                label: const Text(
-                  'History',
-                  style: TextStyle(color: Colors.white),
-                ),
+                label: const Text('History', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   minimumSize: const Size.fromHeight(50),
@@ -130,18 +184,12 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingScreen(),
-                    ),
+                  Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SettingScreen()),
                   );
                 },
                 icon: const Icon(Icons.settings, color: Colors.white),
-                label: const Text(
-                  'Setting',
-                  style: TextStyle(color: Colors.white),
-                ),
+                label: const Text('Setting', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   minimumSize: const Size.fromHeight(50),

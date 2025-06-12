@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'home_screen.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: AboutUsPage(),
-    debugShowCheckedModeBanner: false,
-  ));
+  runApp(MaterialApp(home: AboutUsPage(), debugShowCheckedModeBanner: false));
 }
 
 class AboutUsPage extends StatelessWidget {
@@ -15,7 +12,6 @@ class AboutUsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
 
       appBar: AppBar(
         leading: IconButton(
@@ -27,11 +23,13 @@ class AboutUsPage extends StatelessWidget {
             );
           },
         ),
-        title: const Text('About Us', style: TextStyle(color: Colors.deepPurple)),
+        title: const Text(
+          'About Us',
+          style: TextStyle(color: Colors.deepPurple),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-
 
       body: SafeArea(
         child: ListView(
@@ -59,15 +57,21 @@ class AboutUsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("P MAAF",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      Text(
+                        "P MAAF",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      Text("PMAAF is a team that focuses on mobile application development.",
-                          style: TextStyle(fontSize: 16)),
+                      Text(
+                        "PMAAF is a team that focuses on mobile application development.",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -100,11 +104,23 @@ class AboutUsPage extends StatelessWidget {
               spacing: 16,
               runSpacing: 20,
               children: [
-                teamMember("I Gede Pandu G. P.", "Role", 'assets/mascot_2.png')
-                teamMember("Baiq Annisa Tsalist A.", "Role", 'assets/mascot_3.png'),
-                teamMember("Gusti Ayu Devi A. P.", "Role", 'assets/mascot_4.png'),
+                teamMember("I Gede Pandu G. P.", "Role", 'assets/mascot_2.png'),
+                teamMember(
+                  "Baiq Annisa Tsalist A.",
+                  "Role",
+                  'assets/mascot_3.png',
+                ),
+                teamMember(
+                  "Gusti Ayu Devi A. P.",
+                  "Role",
+                  'assets/mascot_4.png',
+                ),
                 teamMember("Michael Effendy", "Role", 'assets/mascot_5.png'),
-                teamMember("Fadila Ramdhani Muaz", "Role", 'assets/mascot_1.png'),
+                teamMember(
+                  "Fadila Ramdhani Muaz",
+                  "Role",
+                  'assets/mascot_1.png',
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -121,7 +137,12 @@ class AboutUsPage extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(imgPath, width: 150, height: 150, fit: BoxFit.cover),
+            child: Image.asset(
+              imgPath,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
           ),
           const SizedBox(height: 8),
           Text(name, textAlign: TextAlign.center),

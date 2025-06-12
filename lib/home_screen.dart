@@ -5,6 +5,10 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'addTask.dart';
 import 'task_with_timer.dart';
+import 'edit_profile.dart';
+import 'setting.dart';
+import 'profile.dart';
+import 'about_us.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
               MaterialPageRoute(builder: (context) => const AddHabitPage()),
             );
           } else if (index == 2) {
-            // Navigate to profile
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
           }
         },
         items: const [
@@ -44,11 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 53, left: 13, right: 13),
         child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('habits')
-              .where('uid', isEqualTo: FirebaseAuth.instance.currentUser?.uid)
-              .orderBy('createdAt', descending: true)
-              .snapshots(),
+          stream:
+              FirebaseFirestore.instance
+                  .collection('habits')
+                  .where(
+                    'uid',
+                    isEqualTo: FirebaseAuth.instance.currentUser?.uid,
+                  )
+                  .orderBy('createdAt', descending: true)
+                  .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(child: Text('Something went wrong'));
@@ -103,9 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text("To Do",
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w600)),
+                  const Text(
+                    "To Do",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
 
                   ...habits.map((doc) {
                     final data = doc.data() as Map<String, dynamic>;
@@ -124,14 +136,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TaskWithTimer(
-                                taskName: title,
-                                taskDuration: (hours * 60) + minutes,
-                                onComplete: () {
-                                  // Update completion status when timer finishes
-                                  doc.reference.update({'isCompleted': true});
-                                },
-                              ),
+                              builder:
+                                  (context) => TaskWithTimer(
+                                    taskName: title,
+                                    taskDuration: (hours * 60) + minutes,
+                                    onComplete: () {
+                                      // Update completion status when timer finishes
+                                      doc.reference.update({
+                                        'isCompleted': true,
+                                      });
+                                    },
+                                  ),
                             ),
                           );
                         } else {

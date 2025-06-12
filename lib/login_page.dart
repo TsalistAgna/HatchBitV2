@@ -92,16 +92,16 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Center(
                         child:
-                            _isSigning
-                                ? CircularProgressIndicator(color: Colors.white)
-                                : Text(
-                                  "Log In",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                  ),
-                                ),
+                        _isSigning
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                          "Log In",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -188,13 +188,13 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false,
+              (route) => false,
         );
       } else {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HalamanVerifikasiEmail()),
-          (route) => false,
+              (route) => false,
         );
       }
     } else {
@@ -203,29 +203,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _signInWithGoogle() async {
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
+    setState(() => _isSigning = true);
+    User? user = await _auth.signInWithGoogle();
+    setState(() => _isSigning = false);
 
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
-        );
-
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false,
-        );
-      }
-    } catch (e) {
-      showToasts(message: 'Some error occurred: $e');
+    if (user != null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+            (route) => false,
+      );
+    } else {
+      showToasts(message: "Login dengan Google faileddd!!!!");
     }
   }
 }

@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project_mobile/global/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-
   Future<User?> signUpWithEmailAndPassword(
     String email,
     String password,
-      String username,
+    String username,
   ) async {
     try {
       UserCredential credential = await _auth.createUserWithEmailAndPassword(
@@ -64,5 +64,42 @@ class FirebaseAuthService {
     await user
         ?.reload(); // ini sebenenrya biar tau udah diverify atau engga, ambil data terbaru
     return user?.emailVerified ?? false;
+  }
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) {
+        return null;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
+      User? user = userCredential.user;
+
+      final userDoc = _firestore.collection('users').doc(user!.uid);
+      final cek = await userDoc.get();
+
+      if (!cek.exists) {
+        await userDoc.set({
+          'username': user.displayName ?? 'CHANGE ME',
+          'email': user.email,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      return user;
+    } on FirebaseAuthException catch (e) {
+      showToasts(message: 'Login dengan Google failedd: ${e.message}');
+    }
+    return null;
   }
 }

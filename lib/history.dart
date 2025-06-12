@@ -37,7 +37,7 @@ class HistoryScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Image.asset('assets/images/Level1.png', height: 140),
+                    Image.asset('assets/mascot_1.png', height: 140),
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.symmetric(

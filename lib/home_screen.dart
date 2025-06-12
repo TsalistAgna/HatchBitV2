@@ -91,6 +91,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
             final habits = snapshot.data!.docs;
 
+            final selectedDateOnly = DateTime(
+              selectedDate.year,
+              selectedDate.month,
+              selectedDate.day,
+            );
+
+            final filteredHabits = habits.where((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              final Timestamp timestamp = data['createdAt'];
+              final docDate = timestamp.toDate();
+              final docDateOnly = DateTime(docDate.year, docDate.month, docDate.day);
+              return docDateOnly == selectedDateOnly;
+            }).toList();
+
+            final incompleteHabits = filteredHabits.where((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return !(data['isCompleted'] ?? false);
+            }).toList();
+
+            final completedHabits = filteredHabits.where((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              return (data['isCompleted'] ?? false);
+            }).toList();
+
+
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,12 +160,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+
+                  // task belum selesai
                   const Text(
                     "To Do",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
-
-                  ...habits.map((doc) {
+                  ...incompleteHabits.map((doc) {
                     final data = doc.data() as Map<String, dynamic>;
                     final title = data['title'] ?? '';
                     final desc = data['description'] ?? '';
@@ -157,30 +183,54 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder:
-                                  (context) => TaskWithTimer(
-                                    taskName: title,
-                                    taskDuration: (hours * 60) + minutes,
-                                    onComplete: () {
-                                      // Update completion status when timer finishes
-                                      doc.reference.update({
-                                        'isCompleted': true,
-                                      });
-                                    },
-                                  ),
+                              builder: (context) => TaskWithTimer(
+                                taskName: title,
+                                taskDuration: (hours * 60) + minutes,
+                                onComplete: () {
+                                  doc.reference.update({'isCompleted': true});
+                                },
+                              ),
                             ),
                           );
                         } else {
-                          // Toggle completion status for non-timer tasks
                           doc.reference.update({'isCompleted': !isCompleted});
                         }
                       },
                     );
                   }),
+
+                  const SizedBox(height: 30),
+
+                  // task selesai
+                  const Text(
+                    "Completed",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                  ...completedHabits.map((doc) {
+                    final data = doc.data() as Map<String, dynamic>;
+                    final title = data['title'] ?? '';
+                    final desc = data['description'] ?? '';
+                    final useTimer = data['useTimer'] ?? false;
+                    final hours = data['hours'] ?? 0;
+                    final minutes = data['minutes'] ?? 0;
+                    final isCompleted = data['isCompleted'] ?? false;
+
+                    return TaskCard(
+                      taskName: "$title${useTimer ? " ($hours:$minutes)" : ""}",
+                      isDone: isCompleted,
+                      onTap: () {
+                        if (!useTimer) {
+                          doc.reference.update({'isCompleted': !isCompleted});
+                        }
+                      },
+                    );
+                  }),
+
                   const SizedBox(height: 45),
                 ],
               ),
             );
+
           },
         ),
       ),

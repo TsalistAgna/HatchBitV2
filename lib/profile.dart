@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // tambahkan ini
 import 'history.dart';
 import 'setting.dart';
 import 'home_screen.dart';
 import 'about_us.dart';
+import 'addTask.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -11,38 +13,49 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: CurvedNavigationBar(
+        index: 2,
+        backgroundColor: Colors.white,
+        color: Colors.deepPurple,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AddHabitPage()),
+            );
+          } else if (index == 2) {
+            // Stay on ProfileScreen
+          }
+        },
+        items: const [
+          Icon(Icons.home, color: Colors.white),
+          Icon(Icons.add, color: Colors.white),
+          Icon(Icons.person, color: Colors.white),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back Button
-              IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.deepPurple),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-
               const SizedBox(height: 12),
-
-              // Title
-              const Text(
-                'Profile',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Avatar
               Center(
                 child: Column(
                   children: [
+                    const Text(
+                      'Profile',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple,
+                      ),
+                    ),
                     const Text(
                       'Carmen Slebew',
                       style: TextStyle(
@@ -56,14 +69,11 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
-                    Image.asset('assets/images/Level1.png', height: 130),
+                    Image.asset('assets/mascot_1.png', height: 130),
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
-
-              // Level & Progress Bar
               Column(
                 children: [
                   Row(
@@ -74,11 +84,10 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 6),
-                  // Progress bar dibikin lebih tebal dan stylish
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 24, // <- Dipertebal
+                      height: 24,
                       child: LinearProgressIndicator(
                         value: 12 / 20,
                         backgroundColor: Colors.purple.shade100,
@@ -95,10 +104,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 32),
-
-              // History Button
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -121,11 +127,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // Setting Button
-              // Setting Button
               ElevatedButton.icon(
                 onPressed: () {
                   Navigator.push(
@@ -148,10 +150,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const Spacer(),
-
-              // ABOUT US
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -200,7 +199,6 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

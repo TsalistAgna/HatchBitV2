@@ -169,7 +169,7 @@ class _SignUpPageState extends State<SignUpPage> {
       isSigningUp = true;
     });
 
-    User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    User? user = await _auth.signUpWithEmailAndPassword(email, password, username);
 
     setState(() {
       isSigningUp = false;

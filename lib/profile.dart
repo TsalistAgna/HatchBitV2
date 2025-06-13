@@ -25,6 +25,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchCompletedTaskCount();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetchCompletedTaskCount();
+  }
+
   void fetchCompletedTaskCount() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
@@ -41,18 +47,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   int getLevel(int count) {
-    if (count >= 125) return 5;
-    if (count >= 100) return 4;
-    if (count >= 75) return 3;
-    if (count >= 50) return 2;
-    if (count >= 20) return 1;
-    return 0;
+    if (count > 100) return 5;
+    if (count > 75) return 4;
+    if (count > 50) return 3;
+    if (count > 20) return 2;
+    return 1;
   }
 
   int getNextLevelTarget(int currentLevel) {
     switch (currentLevel) {
-      case 0:
-        return 20;
       case 1:
         return 50;
       case 2:
@@ -60,9 +63,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
       case 3:
         return 100;
       case 4:
-        return 125;
+        return 101;
+      case 5:
+        return completedCount;
       default:
-        return 125;
+        return 20;
+    }
+  }
+
+  String getLevelName(int level) {
+    switch (level) {
+      case 0:
+        return 'Baby Hatchbit';
+      case 1:
+        return 'Beginner Hatchbit';
+      case 2:
+        return 'Rising Hatchbit';
+      case 3:
+        return 'Pro Hatchbit';
+      case 4:
+        return 'Master Hatchbit';
+      case 5:
+        return 'Legendary Hatchbit';
+      default:
+        return 'Unknown';
     }
   }
 
@@ -70,7 +94,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final level = getLevel(completedCount);
     final nextLevelTarget = getNextLevelTarget(level);
-    final progress = completedCount / nextLevelTarget;
+    final progress = completedCount /
+        (level == 5 ? completedCount : nextLevelTarget);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -113,21 +138,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: Colors.deepPurple,
                       ),
                     ),
-                    const Text(
-                      'Carmen Slebew',
-                      style: TextStyle(
+                    Text(
+                      FirebaseAuth.instance.currentUser?.displayName ?? 'user',
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.deepPurple,
                       ),
                     ),
-                    const Text(
-                      'Baby Hatchbit',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    Text(
+                      getLevelName(level),
+                      style: const TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
                     Image.asset(
-                      'assets/mascot${(level.clamp(1, 5))}.png', // level 0 pakai mascot_1
+                      'assets/mascot_${(level.clamp(1, 5))}.png', // level 0 pakai mascot_1
                       height: 130,
                     ),
                   ],

@@ -102,7 +102,9 @@ class _HomeScreenState extends State<HomeScreen> {
               final Timestamp timestamp = data['createdAt'];
               final docDate = timestamp.toDate();
               final docDateOnly = DateTime(docDate.year, docDate.month, docDate.day);
-              return docDateOnly == selectedDateOnly;
+              final isCompleted = data['isCompleted'] ?? false;
+
+              return !isCompleted || docDateOnly == selectedDateOnly;
             }).toList();
 
             final incompleteHabits = filteredHabits.where((doc) {
@@ -196,6 +198,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           doc.reference.update({'isCompleted': !isCompleted});
                         }
                       },
+                      onDelete: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text("Hapus Task"),
+                            content: const Text("Yakin ingin menghapus task ini?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("Batal"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  doc.reference.delete();
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     );
                   }),
 
@@ -242,34 +266,46 @@ class TaskCard extends StatelessWidget {
   final String taskName;
   final bool isDone;
   final VoidCallback? onTap;
+  final VoidCallback? onDelete;
 
   const TaskCard({
     super.key,
     required this.taskName,
     required this.isDone,
-    required this.onTap,
+    this.onTap,
+    this.onDelete,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Card(
-        color: isDone ? Colors.green.shade50 : Colors.deepPurple.shade50,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        child: ListTile(
-          title: Text(
-            taskName,
-            style: TextStyle(
-              decoration: isDone ? TextDecoration.lineThrough : null,
-              color: isDone ? Colors.grey : Colors.black,
+    return Card(
+      color: isDone ? Colors.green.shade50 : Colors.deepPurple.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      child: ListTile(
+        onTap: onTap,
+        title: Text(
+          taskName,
+          style: TextStyle(
+            decoration: isDone ? TextDecoration.lineThrough : null,
+            color: isDone ? Colors.grey : Colors.black,
+          ),
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: onDelete,
             ),
-          ),
-          trailing: Icon(
-            isDone ? Icons.check_circle : Icons.radio_button_unchecked,
-            color: isDone ? Colors.green : Colors.purple,
-          ),
+            IconButton(
+              icon: Icon(
+                isDone ? Icons.check_circle : Icons.radio_button_unchecked,
+                color: isDone ? Colors.green : Colors.purple,
+              ),
+              onPressed: onTap,
+            ),
+          ],
         ),
       ),
     );

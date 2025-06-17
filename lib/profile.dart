@@ -153,7 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     Text(
-                      FirebaseAuth.instance.currentUser?.displayName ?? 'user',
+                      username.isNotEmpty ? username : 'User',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

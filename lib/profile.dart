@@ -18,11 +18,25 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int completedCount = 0;
+  String username = '';
 
   @override
   void initState() {
     super.initState();
     fetchCompletedTaskCount();
+    getUserName();
+  }
+
+  void getUserName() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (doc.exists) {
+        setState(() {
+          username = doc.data()?['username'] ?? '';
+        });
+      }
+    }
   }
 
   @override

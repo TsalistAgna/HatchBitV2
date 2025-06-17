@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'edit_profile.dart';
+import 'profile.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -16,8 +17,13 @@ class SettingScreen extends StatelessWidget {
             children: [
               // Tombol kembali
               IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.deepPurple),
-                onPressed: () => Navigator.pop(context),
+                icon: Image.asset('assets/icons/back.png', width: 40, height: 40),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                  );
+                },
               ),
 
               const SizedBox(height: 8),

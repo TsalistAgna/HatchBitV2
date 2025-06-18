@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'edit_profile.dart';
 import 'profile.dart';
+import 'login_page.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -112,6 +117,48 @@ class SettingScreen extends StatelessWidget {
                     const SizedBox(height: 8),
                     _preferenceTile(),
                   ],
+                ),
+              ),
+
+              ElevatedButton.icon(
+                onPressed: () async {
+                  final shouldLogout = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Logout Confirmation'),
+                      content: const Text('Are you sure you want to logout?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text('Logout'),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (shouldLogout == true) {
+                    await FirebaseAuth.instance.signOut();
+                    if (context.mounted) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        (Route<dynamic> route) => false,
+                      );
+                    }
+                  }
+                },
+                icon: const Icon(Icons.logout, color: Colors.white),
+                label: const Text('Logout', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/login_page.dart';
+import 'package:project_mobile/sign_up_page.dart';
 
 class IntroPage4 extends StatelessWidget{
   const IntroPage4({super.key});
@@ -50,7 +52,12 @@ class IntroPage4 extends StatelessWidget{
                   width: 330, // atur lebar tombol
                   child: ElevatedButton(
                     onPressed: () {
-                      // aksi saat Get Started ditekan
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
@@ -76,7 +83,12 @@ class IntroPage4 extends StatelessWidget{
               // Link "I already have an account"
               GestureDetector(
                 onTap: () {
-                  // aksi saat link ditekan
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
                 },
                 child: const Text(
                   'I already have an account',

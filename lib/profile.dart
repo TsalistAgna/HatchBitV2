@@ -239,30 +239,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
 
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  if (context.mounted) {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
-                          (Route<dynamic> route) => false,
-                    );
-                  }
-                },
-                icon: const Icon(Icons.logout, color: Colors.white),
-                label: const Text('Logout', style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-
-
               const Spacer(),
               GestureDetector(
                 onTap: () {

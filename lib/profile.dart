@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_mobile/login_page.dart';
 
 import 'history.dart';
 import 'setting.dart';
@@ -237,6 +238,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
+
+              const SizedBox(height: 16),
+              ElevatedButton.icon(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  if (context.mounted) {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                          (Route<dynamic> route) => false,
+                    );
+                  }
+                },
+                icon: const Icon(Icons.logout, color: Colors.white),
+                label: const Text('Logout', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+
+
               const Spacer(),
               GestureDetector(
                 onTap: () {
@@ -276,7 +302,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Icon(Icons.copyright, size: 16, color: Colors.white70),
                           SizedBox(width: 6),
                           Text(
-                            'PMaap Studio 2025',
+                            'PMAAF Studio 2025',
                             style: TextStyle(fontSize: 14, color: Colors.white70),
                           ),
                         ],

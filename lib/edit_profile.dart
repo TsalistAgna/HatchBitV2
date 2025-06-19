@@ -162,13 +162,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 // Back Button
                 IconButton(
-                  icon: const Icon(Icons.arrow_back,
-                      color: Colors.deepPurple),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-
+                      icon: Image.asset(
+                        'assets/icons/back.png',
+                        width: 40,
+                        height: 40,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }
+                  ),
                 const SizedBox(height: 8),
 
                 const Text(
@@ -245,7 +247,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   readOnly: _isGoogleUser,
                   decoration: _inputDecoration(
                     hint:
-                    'Fill this field only if you want to change the password',
+                    'New password (optional)',
                   ),
                 ),
 
@@ -264,7 +266,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   obscureText: true,
                   decoration: _inputDecoration(
                     hint:
-                    'Fill this field only if you want to change the password',
+                    'Confirm new password (optional)',
                   ),
                 ),
 

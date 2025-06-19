@@ -76,10 +76,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
               IconButton(
                 icon: Image.asset('assets/icons/back.png', width: 40, height: 40),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                  );
+                  Navigator.pop(context);
                 },
               ),
               const SizedBox(height: 12),

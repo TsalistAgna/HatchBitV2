@@ -10,6 +10,7 @@ import 'package:project_mobile/verifikasi_email.dart';
 import 'package:project_mobile/widgets/form_container_widget.dart';
 import 'global/toast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'main_screen.dart'; 
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -187,7 +188,9 @@ class _LoginPageState extends State<LoginPage> {
         showToasts(message: "User is successfully signed in");
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          // MaterialPageRoute(builder: (context) => HomeScreen()),
+          //     (route) => false,
+          MaterialPageRoute(builder: (context) => MainScreen()),
               (route) => false,
         );
       } else {

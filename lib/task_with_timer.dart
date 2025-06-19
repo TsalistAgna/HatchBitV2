@@ -91,10 +91,7 @@ class _TaskWithTimerState extends State<TaskWithTimer> {
                         height: 40,
                       ),
                       onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const HomeScreen()),
-                        );
+                        Navigator.pop(context);
                       }
                   ),
                   Text(

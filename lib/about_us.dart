@@ -19,10 +19,7 @@ class AboutUsPage extends StatelessWidget {
         leading: IconButton(
           icon: Image.asset('assets/icons/back.png', width: 40, height: 40),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
-            );
+            Navigator.pop(context);
           },
         ),
         title: const Text(

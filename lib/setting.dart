@@ -24,10 +24,7 @@ class SettingScreen extends StatelessWidget {
               IconButton(
                 icon: Image.asset('assets/icons/back.png', width: 40, height: 40),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ProfileScreen()),
-                  );
+                  Navigator.pop(context);
                 },
               ),
 
@@ -94,32 +91,33 @@ class SettingScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Section: Preferences
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple.shade50,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Preferences',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    _preferenceTile(),
-                    const SizedBox(height: 8),
-                    _preferenceTile(),
-                    const SizedBox(height: 8),
-                    _preferenceTile(),
-                  ],
-                ),
-              ),
+              // Container(
+              //   padding: const EdgeInsets.all(16),
+              //   decoration: BoxDecoration(
+              //     color: Colors.deepPurple.shade50,
+              //     borderRadius: BorderRadius.circular(16),
+              //   ),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       const Text(
+              //         'Preferences',
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           color: Colors.black87,
+              //         ),
+              //       ),
+              //       const SizedBox(height: 12),
+              //       _preferenceTile(),
+              //       const SizedBox(height: 8),
+              //       _preferenceTile(),
+              //       const SizedBox(height: 8),
+              //       _preferenceTile(),
+              //     ],
+              //   ),
+              // ),
 
+              // const Spacer(),
               ElevatedButton.icon(
                 onPressed: () async {
                   final shouldLogout = await showDialog<bool>(
@@ -162,10 +160,10 @@ class SettingScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
-              _preferenceTile(),
-              const SizedBox(height: 8),
-              _preferenceTile(),
+              // const SizedBox(height: 16),
+              // _preferenceTile(),
+              // const SizedBox(height: 8),
+              // _preferenceTile(),
             ],
           ),
         ),

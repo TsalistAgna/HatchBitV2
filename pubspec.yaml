@@ -85,6 +85,7 @@ flutter:
     - assets/mascot_3.png
     - assets/mascot_4.png
     - assets/mascot_5.png
+    - assets/placeholder_grup.png
   
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_mobile/home_screen.dart';
+import 'package:project_mobile/main_screen.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -246,7 +246,7 @@ class _AddHabitPageState extends State<AddHabitPage> {
                 _resetForm();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const MainScreen()),
                 );
               },
               child: const Text("OK"),

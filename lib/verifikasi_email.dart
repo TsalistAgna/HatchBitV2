@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:project_mobile/global/toast.dart';
-import 'package:project_mobile/home_screen.dart';
+import 'package:project_mobile/main_screen.dart';
 import 'package:project_mobile/login_page.dart';
 
 class HalamanVerifikasiEmail extends StatefulWidget {
@@ -43,7 +43,7 @@ class _HalamanVerifikasiEmailState extends State<HalamanVerifikasiEmail> {
       showToasts(message: "Email Anda wes terverifikasi!");
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => MainScreen()),
         (route) => false,
       );
     }

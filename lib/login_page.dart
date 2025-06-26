@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:project_mobile/home_screen.dart';
+import 'package:project_mobile/main_screen.dart';
 import 'package:project_mobile/sign_up_page.dart';
 import 'package:project_mobile/user_auth/firebase_auth/firebase_auth_services.dart';
 import 'package:project_mobile/verifikasi_email.dart';
@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
     if (user != null) {
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => MainScreen()),
             (route) => false,
       );
     } else {

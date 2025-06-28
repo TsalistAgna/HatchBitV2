@@ -179,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     return TaskCard(
                       taskName: "$title${useTimer ? " ($hours:$minutes)" : ""}",
+                      taskDescription: desc,
                       isDone: isCompleted,
                       onTap: () {
                         if (useTimer) {
@@ -202,19 +203,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: const Text("Hapus Task"),
-                            content: const Text("Yakin ingin menghapus task ini?"),
+                            title: const Text("Delete Task"),
+                            content: const Text("Are you sure you want to delete this task?"),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text("Batal"),
+                                child: const Text("Close"),
                               ),
                               TextButton(
                                 onPressed: () {
                                   doc.reference.delete();
                                   Navigator.pop(context);
                                 },
-                                child: const Text("Hapus", style: TextStyle(color: Colors.red)),
+                                child: const Text("Delete", style: TextStyle(color: Colors.red)),
                               ),
                             ],
                           ),
@@ -296,14 +297,6 @@ class TaskCard extends StatelessWidget {
                   child: const Text("Close"),
                   onPressed: () => Navigator.pop(context),
                 ),
-                if (onTap != null)
-                  TextButton(
-                    child: const Text("Do Task Now"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      onTap!();
-                    },
-                  ),
               ],
             ),
           );

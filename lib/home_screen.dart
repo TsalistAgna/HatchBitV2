@@ -264,6 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class TaskCard extends StatelessWidget {
   final String taskName;
+  final String? taskDescription;
   final bool isDone;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
@@ -271,6 +272,7 @@ class TaskCard extends StatelessWidget {
   const TaskCard({
     super.key,
     required this.taskName,
+    this.taskDescription,
     required this.isDone,
     this.onTap,
     this.onDelete,
@@ -283,7 +285,29 @@ class TaskCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: ListTile(
-        onTap: onTap,
+        onTap: (){
+          showDialog(
+          context: context,
+            builder: (context) => AlertDialog(
+              title: Text(taskName),
+              content: Text(taskDescription ?? "No Description"),
+              actions: [
+                TextButton(
+                  child: const Text("Close"),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                if (onTap != null)
+                  TextButton(
+                    child: const Text("Do Task Now"),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      onTap!();
+                    },
+                  ),
+              ],
+            ),
+          );
+        },
         title: Text(
           taskName,
           style: TextStyle(

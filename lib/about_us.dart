@@ -87,7 +87,7 @@ class AboutUsPage extends StatelessWidget {
             // Image Section
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset('assets/placeholder_grup.png'),
+              child: Image.asset('assets/foto_grup.jpg'),
             ),
             const SizedBox(height: 24),
 

@@ -74,17 +74,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   int getNextLevelTarget(int currentLevel) {
     switch (currentLevel) {
       case 1:
-        return 50;
-      case 2:
-        return 75;
-      case 3:
-        return 100;
-      case 4:
-        return 101;
-      case 5:
-        return completedCount;
-      default:
         return 20;
+      case 2:
+        return 50;
+      case 3:
+        return 75;
+      case 4:
+        return 100;
+      default:
+        return completedCount;
     }
   }
 
@@ -116,27 +114,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   index: 2,
-      //   backgroundColor: Colors.white,
-      //   color: Colors.deepPurple,
-      //   onTap: (index) {
-      //     if (index == 0) {
-      //       Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => const HomeScreen()),
-      //       );
-      //     } else if (index == 1) {
-      //       Navigator.push(context,
-      //         MaterialPageRoute(builder: (context) => const AddHabitPage()),
-      //       );
-      //     }
-      //   },
-      //   items: const [
-      //     Icon(Icons.home, color: Colors.white),
-      //     Icon(Icons.add, color: Colors.white),
-      //     Icon(Icons.person, color: Colors.white),
-      //   ],
-      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

@@ -45,30 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   backgroundColor: Colors.white,
-      //   color: Colors.deepPurple,
-      //   onTap: (index) {
-      //     if (index == 0) {
-      //       // Stay on home
-      //     } else if (index == 1) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => const AddHabitPage()),
-      //       );
-      //     } else if (index == 2) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => const ProfileScreen()),
-      //       );
-      //     }
-      //   },
-      //   items: const [
-      //     Icon(Icons.home, color: Colors.white),
-      //     Icon(Icons.add, color: Colors.white),
-      //     Icon(Icons.person, color: Colors.white),
-      //   ],
-      // ),
       body: Padding(
         padding: const EdgeInsets.only(top: 53, left: 13, right: 13),
         child: StreamBuilder<QuerySnapshot>(

@@ -29,39 +29,8 @@ class _AddHabitPageState extends State<AddHabitPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   index: 1,
-      //   backgroundColor: Colors.white,
-      //   color: Colors.deepPurple,
-      //   onTap: (index) {
-      //     if (index == 0) {
-      //       Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-      //     } else if (index == 1) {
-      //       // Stay on AddHabitPage
-      //     } else if (index == 2) {
-      //       Navigator.push(
-      //         context,
-      //         MaterialPageRoute(builder: (context) => const ProfileScreen()),
-      //       );
-      //     }
-      //   },
-      //   items: const [
-      //     Icon(Icons.home, color: Colors.white),
-      //     Icon(Icons.add, color: Colors.white),
-      //     Icon(Icons.person, color: Colors.white),
-      //   ],
-      // ),
       backgroundColor: Colors.white,
       appBar: AppBar(
-        // leading: IconButton(
-        //   icon: Image.asset('assets/icons/back.png', width: 40, height: 40),
-        //   onPressed: () {
-        //     Navigator.pushReplacement(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => const HomeScreen()),
-        //     );
-        //   },
-        // ),
         title: const Text('Create New Habit', style: TextStyle(color: Colors.deepPurple)),
         backgroundColor: Colors.white,
         elevation: 0,

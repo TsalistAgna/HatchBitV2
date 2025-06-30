@@ -38,10 +38,6 @@ class _FormContainerWidgetState extends State<FormContainerWidget> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      // decoration: BoxDecoration(
-      //   color: Colors.grey.withOpacity(.35),
-      //   borderRadius: BorderRadius.circular(10),
-      // ),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12),
